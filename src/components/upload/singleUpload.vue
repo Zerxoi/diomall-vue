@@ -97,7 +97,6 @@ export default {
       })
     },
     handleUploadSuccess (res, file) {
-      console.log('上传成功...')
       this.showFileList = true
       this.fileList.pop()
       this.fileList.push({ name: file.name, url: this.dataObj.host + '/' + this.dataObj.key })
