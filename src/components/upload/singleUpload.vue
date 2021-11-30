@@ -43,17 +43,20 @@ export default {
       }
     },
     fileList () {
-      return [{
-        name: this.imageName,
-        url: this.imageUrl
-      }]
+      return [
+        {
+          name: this.imageName,
+          url: this.imageUrl
+        }
+      ]
     },
     showFileList: {
       get: function () {
-        return this.value !== null && this.value !== '' && this.value !== undefined
+        return (
+          this.value !== null && this.value !== '' && this.value !== undefined
+        )
       },
-      set: function (newValue) {
-      }
+      set: function (newValue) {}
     }
   },
   data () {
@@ -83,29 +86,32 @@ export default {
     beforeUpload (file) {
       let _self = this
       return new Promise((resolve, reject) => {
-        policy().then(response => {
-          _self.dataObj.policy = response.data.policy
-          _self.dataObj.signature = response.data.signature
-          _self.dataObj.ossaccessKeyId = response.data.accessid
-          _self.dataObj.key = response.data.dir + '/' + getUUID() + `_${file.name}`
-          _self.dataObj.dir = response.data.dir
-          _self.dataObj.host = response.data.host
-          resolve(true)
-        }).catch(() => {
-          reject(new Error(false))
-        })
+        policy()
+          .then(response => {
+            _self.dataObj.policy = response.data.policy
+            _self.dataObj.signature = response.data.signature
+            _self.dataObj.ossaccessKeyId = response.data.accessid
+            _self.dataObj.key =
+              response.data.dir + '/' + getUUID() + `_${file.name}`
+            _self.dataObj.dir = response.data.dir
+            _self.dataObj.host = response.data.host
+            resolve(true)
+          })
+          .catch(() => {
+            reject(new Error(false))
+          })
       })
     },
     handleUploadSuccess (res, file) {
       this.showFileList = true
       this.fileList.pop()
-      this.fileList.push({ name: file.name, url: this.dataObj.host + '/' + this.dataObj.key })
+      this.fileList.push({
+        name: file.name,
+        url: this.dataObj.host + '/' + this.dataObj.key
+      })
       this.emitInput(this.fileList[0].url)
     }
   }
 }
 </script>
-<style>
-</style>
-
-
+<style></style>

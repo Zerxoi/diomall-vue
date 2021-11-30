@@ -1,42 +1,56 @@
 <template>
-  <el-tree
-    :data="data"
-    :props="defaultProps"
-    node-key="catId"
-    @node-click="nodeClick"
-  >
-  </el-tree>
+  <div>
+    <el-input placeholder="输入关键字进行过滤" v-model="filterText"></el-input>
+    <el-tree
+      :data="menus"
+      :props="defaultProps"
+      node-key="catId"
+      ref="menuTree"
+      @node-click="nodeclick"
+      :filter-node-method="filterNode"
+      :highlight-current="true"
+    ></el-tree>
+  </div>
 </template>
 
 <script>
 export default {
   data () {
     return {
-      data: [],
+      filterText: '',
+      menus: [],
+      expandedKey: [],
       defaultProps: {
         children: 'children',
         label: 'name'
       }
     }
   },
+  watch: {
+    filterText (val) {
+      this.$refs.menuTree.filter(val)
+    }
+  },
   methods: {
-    getCategoryListTree () {
+    filterNode (value, data) {
+      if (!value) return true
+      return data.name.indexOf(value) !== -1
+    },
+    getMenus () {
       this.$http({
         url: this.$http.adornUrl('/product/category/list/tree'),
         method: 'get'
       }).then(({ data }) => {
-        this.data = data.data
+        this.menus = data.data
       })
     },
-    nodeClick (data, node) {
-      this.$emit('category-node-click', data, node)
+    nodeclick (data, node, component) {
+      this.$emit('tree-node-click', data, node, component)
     }
   },
   created () {
-    this.getCategoryListTree()
+    this.getMenus()
   }
 }
 </script>
-
-<style>
-</style>
+<style scoped></style>

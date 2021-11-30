@@ -65,9 +65,7 @@ export default {
         sort: ''
       },
       dataRule: {
-        name: [
-          { required: true, message: '品牌名不能为空', trigger: 'blur' }
-        ],
+        name: [{ required: true, message: '品牌名不能为空', trigger: 'blur' }],
         logo: [
           { required: true, message: '品牌logo地址不能为空', trigger: 'blur' }
         ],
@@ -75,14 +73,16 @@ export default {
           { required: true, message: '介绍不能为空', trigger: 'blur' }
         ],
         showStatus: [
-          { required: true, message: '显示状态[0-不显示；1-显示]不能为空', trigger: 'blur' }
+          {
+            required: true,
+            message: '显示状态[0-不显示；1-显示]不能为空',
+            trigger: 'blur'
+          }
         ],
         firstLetter: [
           { required: true, message: '检索首字母不能为空', trigger: 'blur' }
         ],
-        sort: [
-          { required: true, message: '排序不能为空', trigger: 'blur' }
-        ]
+        sort: [{ required: true, message: '排序不能为空', trigger: 'blur' }]
       }
     }
   },
@@ -94,7 +94,9 @@ export default {
         this.$refs['dataForm'].resetFields()
         if (this.dataForm.brandId) {
           this.$http({
-            url: this.$http.adornUrl(`/product/brand/info/${this.dataForm.brandId}`),
+            url: this.$http.adornUrl(
+              `/product/brand/info/${this.dataForm.brandId}`
+            ),
             method: 'get',
             params: this.$http.adornParams()
           }).then(({ data }) => {
@@ -112,19 +114,21 @@ export default {
     },
     // 表单提交
     dataFormSubmit () {
-      this.$refs['dataForm'].validate((valid) => {
+      this.$refs['dataForm'].validate(valid => {
         if (valid) {
           this.$http({
-            url: this.$http.adornUrl(`/product/brand/${!this.dataForm.brandId ? 'save' : 'update'}`),
+            url: this.$http.adornUrl(
+              `/product/brand/${!this.dataForm.brandId ? 'save' : 'update'}`
+            ),
             method: 'post',
             data: this.$http.adornData({
-              'brandId': this.dataForm.brandId || undefined,
-              'name': this.dataForm.name,
-              'logo': this.dataForm.logo,
-              'descript': this.dataForm.descript,
-              'showStatus': this.dataForm.showStatus,
-              'firstLetter': this.dataForm.firstLetter,
-              'sort': this.dataForm.sort
+              brandId: this.dataForm.brandId || undefined,
+              name: this.dataForm.name,
+              logo: this.dataForm.logo,
+              descript: this.dataForm.descript,
+              showStatus: this.dataForm.showStatus,
+              firstLetter: this.dataForm.firstLetter,
+              sort: this.dataForm.sort
             })
           }).then(({ data }) => {
             if (data && data.code === 0) {
